@@ -3,6 +3,7 @@ from qiskit.providers.providerutils import filter_backends
 
 from .backend import BlockchainBackend
 
+import os 
 import web3
 import pathlib
 from solcx import compile_source
@@ -29,16 +30,16 @@ class BlockchainProvider(Provider):
         web3_provider: web3.Web3,
         provider_address: str,
         is_local: bool = False,
-        approximation_depth: int = 0,
-        approximation_recursion_degree: int = 0
+        basic_approx_depth: int = 3,
+        skd_recursion_degree: int = 3
     ):
         r"""
         Args:
             web3_provider: The web3 provider for the blockchain.
             provider_address: The address of the provider smart contract.
             is_local: If the provider is local or not.
-            approximation_depth: The basic approximation depth.
-            approximation_recursion_degree: The skd recursion degree.
+            basic_approx_depth: The basic approximation depth.
+            skd_recursion_degree: The skd recursion degree.
         """
         super().__init__()
         self.web3_provider = web3_provider
@@ -66,8 +67,8 @@ class BlockchainProvider(Provider):
                 backend_address=backend_address,
                 is_local=is_local,
                 backend_seed=0,
-                approximation_depth=approximation_depth,
-                approximation_recursion_degree=approximation_recursion_degree
+                basic_approx_depth=basic_approx_depth,
+                skd_recursion_degree=skd_recursion_degree
             )
             for backend_address in web3_backends
         ]
@@ -87,13 +88,13 @@ class LocalPqceeProvider(BlockchainProvider):
 
     def __init__(
         self,
-        approximation_depth: int = 0,
-        approximation_recursion_degree: int = 0
+        basic_approx_depth: int = 3,
+        skd_recursion_degree: int = 3
     ):
         """
         Args:
-            approximation_depth: The basic approximation depth.
-            approximation_recursion_degree: The skd recursion degree.
+            basic_approx_depth: The basic approximation depth.
+            skd_recursion_degree: The skd recursion degree.
         """
         web3_provider = web3.Web3(web3.Web3.EthereumTesterProvider())
         web3_account = web3_provider.eth.accounts[0]
@@ -168,8 +169,8 @@ class LocalPqceeProvider(BlockchainProvider):
             web3_provider=web3_provider,
             provider_address=provider_address,
             is_local=True,
-            approximation_depth=approximation_depth,
-            approximation_recursion_degree=approximation_recursion_degree
+            basic_approx_depth=basic_approx_depth,
+            skd_recursion_degree=skd_recursion_degree
         )
 
 
@@ -180,19 +181,19 @@ class PqceeProvider(BlockchainProvider):
 
     def __init__(
         self,
-        approximation_depth: int = 0,
-        approximation_recursion_degree: int = 0
+        basic_approx_depth: int = 3,
+        skd_recursion_degree: int = 3
     ):
         """
         Args:
-            approximation_depth: The basic approximation depth.
-            approximation_recursion_degree: The skd recursion degree.
+            basic_approx_depth: The basic approximation depth.
+            skd_recursion_degree: The skd recursion degree.
         """
         # read the config file
         config = configparser.ConfigParser(allow_no_value=True)
         mod_path = pathlib.Path(__file__).parent.absolute()
         absolute_path = (
-            mod_path / "mumbai_testnet_config.ini"
+            mod_path / "amoy_testnet_config.ini"
         ).resolve()
         config.read(absolute_path)
         # verify if there are contracts already deployed
@@ -206,11 +207,32 @@ class PqceeProvider(BlockchainProvider):
             raise Exception("No mumbai in config file")
 
         # working connection on web3 https://rpc-mumbai.maticvigil.com/
+        # os.environ['TESTNET_RPC_URL']
+        # web3_provider = web3.Web3(
+        #     web3.Web3.HTTPProvider(
+        #         endpoint_uri=os.environ['TESTNET_RPC_URL']
+        #     )
+        # )
+        rpc_url = None
+        if 'RPC_URL' in config:
+            if 'TESTNET_RPC' in config['RPC_URL']:
+                rpc_url = (
+                    config['RPC_URL']['TESTNET_RPC']
+                )
+        else:
+            config['RPC_URL'] = {}
+    
+    
+        if rpc_url is None:
+            raise ValueError("No RPC URL found")
+    
+        # working address for qeb3 https://rpc-mumbai.maticvigil.com/
         web3_provider = web3.Web3(
             web3.Web3.HTTPProvider(
-                endpoint_uri='https://rpc-mumbai.maticvigil.com/'
+                endpoint_uri=rpc_url
             )
         )
+
         # setup poa
         web3_provider.middleware_onion.inject(geth_poa_middleware, layer=0)
 
@@ -218,6 +240,6 @@ class PqceeProvider(BlockchainProvider):
             web3_provider=web3_provider,
             provider_address=provider_address,
             is_local=False,
-            approximation_depth=approximation_depth,
-            approximation_recursion_degree=approximation_recursion_degree
+            basic_approx_depth=basic_approx_depth,
+            skd_recursion_degree=skd_recursion_degree
         )
