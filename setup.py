@@ -8,30 +8,22 @@ REQUIREMENTS = [
     "qiskit[visualization]",
     "web3[tester]",
     "py-solc-x",
-    "scikit-learn",
-    "numpy",
-    "qiskit-aer"
+    "scikit-learn"
 ]
-
-# read the verison from the file
-VERSION_FILE = (this_directory / "qiskit_pqcee_provider" / "VERSION.txt").resolve()
-# read the version
-with open(VERSION_FILE, "r") as version_file:
-    VERSION = version_file.read().strip()
 
 setuptools.setup(
     name='qiskit_pqcee_provider',
-    version=VERSION,
+    version='0.1.3',
     description='A qiskit provider on the blockchain.',
     long_description=README,
     long_description_content_type="text/markdown",
-    url='https://github.com/sbip-sg/qiskit-pqcee-provider',
-    author='Stefan-Dan Ciocirlan (sdcioc)',
-    author_email='stefan_dan@xn--ciocirlan-o2a.ro',
+    url='https://github.com/pqcee/qiskit-pqcee-provider',
+    author='pQCee Product Team',
+    author_email='jonathan@pqcee.com',
     license='MIT',
     packages=setuptools.find_packages(exclude=["test*"]),
     package_data={"qiskit_pqcee_provider": ["contracts/*.sol",
-                                            "mumbai_testnet_config.ini"]},
+                                            "amoy_testnet_config.ini"]},
     install_requires=REQUIREMENTS,
     classifiers=[
         "Intended Audience :: Developers",
@@ -47,4 +39,5 @@ setuptools.setup(
     python_requires=">=3.10, <4",
     zip_safe=False,
     include_package_data=True,
-)
+    )
+
