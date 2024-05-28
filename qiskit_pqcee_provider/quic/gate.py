@@ -36,7 +36,10 @@ def cpdg45_instruction() -> qiskit.circuit.Instruction:
     qc.cp(-np.pi/4, 0, 1)
     return qc.to_instruction()
 
-
+# Add here special name 
+# @quicname gate name
+# @qiskitname qiskit instruction
+# @special if the gate is special (optional)
 # Define the basis gates for the PQCEE
 class QuiCGate(enum.Enum):
     IDENTITY_GATE = ("I", qiskit.circuit.library.IGate(), True)

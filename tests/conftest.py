@@ -5,6 +5,8 @@ import qiskit_pqcee_provider.quic
 import itertools
 import functools
 
+# any new gates add here
+
 # Add new gates in the list
 @pytest.fixture
 def quic_gates_name():
@@ -19,11 +21,12 @@ def quic_gates(quic_gates_name):
         )
     )
 
+# add J and U gates here
 @pytest.fixture
 def special_pqcee_gates_quic_name():
     return ["P", "p", "CP", "Cp"]
 
-# Speacial gates from qiskit
+# Special gates from qiskit
 # Identity gate and Measurement gate
 @pytest.fixture
 def special_qiskit_gates():
