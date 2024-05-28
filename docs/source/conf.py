@@ -26,8 +26,21 @@ copyright = '2024, pQCee Product Team'
 author = 'pQCee Product Team'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.3'
-version = '0.1.3'
+# read the verison from the file
+import pathlib
+
+# the current directory
+ROOT_DIR = pathlib.Path(__file__).absolute().parent.parent.parent
+
+# the version file
+VERSION_FILE = (ROOT_DIR / "qiskit_pqcee_provider" / "VERSION.txt").resolve()
+
+# read the version
+with open(VERSION_FILE, "r") as version_file:
+    VERSION = version_file.read().strip()
+
+release = VERSION
+version = VERSION
 
 
 # -- General configuration ---------------------------------------------------

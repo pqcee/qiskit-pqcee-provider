@@ -23,7 +23,6 @@ setuptools.setup(
     name='qiskit_pqcee_provider',
     version=VERSION,
     description='An 8-qubit universal quantum emulator adapted for web3 platforms, originally presented at IEEE QCE 20. This package takes Qiskit code and converts it to QuICScript, a language developed by pQCee to write quantum circuits.',
-    # version='0.1.3',
     description='A qiskit provider on the blockchain.',
     long_description=README,
     long_description_content_type="text/markdown",
