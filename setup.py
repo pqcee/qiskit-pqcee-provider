@@ -8,14 +8,22 @@ REQUIREMENTS = [
     "qiskit[visualization]",
     "web3[tester]",
     "py-solc-x",
-    "scikit-learn"
+    "scikit-learn",
+    "numpy",
+    "qiskit-aer"
 ]
+
+# read the verison from the file
+VERSION_FILE = (this_directory / "qiskit_pqcee_provider" / "VERSION.txt").resolve()
+# read the version
+with open(VERSION_FILE, "r") as version_file:
+    VERSION = version_file.read().strip()
 
 setuptools.setup(
     name='qiskit_pqcee_provider',
     version=VERSION,
     description='An 8-qubit universal quantum emulator adapted for web3 platforms, originally presented at IEEE QCE 20. This package takes Qiskit code and converts it to QuICScript, a language developed by pQCee to write quantum circuits.',
-    version='0.1.3',
+    # version='0.1.3',
     description='A qiskit provider on the blockchain.',
     long_description=README,
     long_description_content_type="text/markdown",
