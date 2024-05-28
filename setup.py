@@ -31,7 +31,8 @@ setuptools.setup(
     license='MIT',
     packages=setuptools.find_packages(exclude=["test*"]),
     package_data={"qiskit_pqcee_provider": ["contracts/*.sol",
-                                            "amoy_testnet_config.ini"]},
+                                            "amoy_testnet_config.ini",
+                                            "VERSION.txt"]},
     install_requires=REQUIREMENTS,
     classifiers=[
         "Intended Audience :: Developers",
