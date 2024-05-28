@@ -18,20 +18,24 @@ def p45_instruction() -> qiskit.circuit.Instruction:
     qc.p(np.pi/4, 0)
     return qc.to_instruction()
 
+
 def pdg45_instruction() -> qiskit.circuit.Instruction:
     qc = qiskit.QuantumCircuit(1, name='pdg45')
     qc.p(-np.pi/4, 0)
     return qc.to_instruction()
+
 
 def cp45_instruction() -> qiskit.circuit.Instruction:
     qc = qiskit.QuantumCircuit(2, name='cp45')
     qc.cp(np.pi/4, 0, 1)
     return qc.to_instruction()
 
+
 def cpdg45_instruction() -> qiskit.circuit.Instruction:
     qc = qiskit.QuantumCircuit(2, name='cpdg45')
     qc.cp(-np.pi/4, 0, 1)
     return qc.to_instruction()
+
 
 # Define the basis gates for the PQCEE
 class QuiCGate(enum.Enum):
@@ -61,7 +65,7 @@ class QuiCGate(enum.Enum):
     # which can be used for approximations
     # and is used for special pqcee gates
 
-    def __new__ (cls, *args):
+    def __new__(cls, *args):
         value = len(cls.__members__) + 1
         obj = object.__new__(cls)
         obj._value_ = value
@@ -76,16 +80,16 @@ class QuiCGate(enum.Enum):
         self.quicRepresentation = quicRepresentation
         self.qiskitInstruction = qiskitInstruction
         self.special = special
-    
+
     def get_qiskit_instruction(self) -> qiskit.circuit.Instruction:
         return self.qiskitInstruction
 
     def get_quic_representation(self) -> str:
         return self.quicRepresentation
-    
+
     def is_special(self) -> bool:
         return self.special
-    
+
     @staticmethod
     def get_gates_name() -> list[str]:
         return list(map(lambda x: x.name, list(QuiCGate)))
@@ -93,17 +97,24 @@ class QuiCGate(enum.Enum):
     @staticmethod
     def get_gates_quic_name() -> list[str]:
         return list(map(lambda x: x.quicRepresentation, list(QuiCGate)))
-    
+
     @staticmethod
     def get_gates_qiskit_name() -> list[str]:
-        return list(map(lambda x: x.get_qiskit_instruction().name, list(QuiCGate)))
-    
+        return list(
+            map(
+                lambda x: x.get_qiskit_instruction().name,
+                list(QuiCGate)
+            )
+        )
+
     @classmethod
     def from_quic_name(cls, value: str) -> QuiCGate:
         for member in cls.__members__.values():
             if member.quicRepresentation == value:
                 return member
-        raise KeyError(f"Quic Gate {value} is not part of the QuiCGate enum.")    
+        raise KeyError(
+            f"Quic Gate {value} is not part of the QuiCGate enum."
+        )
 
     @classmethod
     def _missing_(cls, value: str) -> QuiCGate:
@@ -117,4 +128,6 @@ class QuiCGate(enum.Enum):
         for member in cls.__members__.values():
             if member.get_qiskit_instruction().name == value:
                 return member
-        raise KeyError(f"Qiskit Gate {value} is not part of the QuiCGate enum.")
+        raise KeyError(
+            f"Qiskit Gate {value} is not part of the QuiCGate enum."
+        )

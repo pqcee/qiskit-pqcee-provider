@@ -18,6 +18,7 @@ from .target import QuiCTarget
 
 logger = logging.getLogger(__name__)
 
+
 def get_SolovayKitaev_pass_manager(
     basis_gates: list[str] = None,
     depth: int = 3,
@@ -76,7 +77,7 @@ class QuiCBackend(Backend):
             )
         else:
             self._approximation_pass_manager = None
-    
+
     @property
     def target(self):
         return self._target
@@ -88,7 +89,7 @@ class QuiCBackend(Backend):
     @classmethod
     def _default_options(cls):
         return Options(shots=10)
-    
+
     def run(self, circuits, **kwargs):
         # serialize circuits submit to backend and create a job
         for kwarg in kwargs:
@@ -107,7 +108,7 @@ class QuiCBackend(Backend):
         fake_simulator = AerSimulator.from_backend(self)
         # run the circuits
         return fake_simulator.run(circuits, **options)
-    
+
     def run_aer_simulator(self, circuits, **kwargs):
         # serialize circuits submit to backend and create a job
         for kwarg in kwargs:
@@ -257,16 +258,25 @@ class QuiCBackend(Backend):
                 ]
                 # verify the correctness of the quic string
                 if len(target_qubits) != 1:
-                    raise ValueError(f"{quic_gate}: QuIC gate string is not correct.")
+                    raise ValueError(
+                        f"{quic_gate}: QuIC gate string is not correct."
+                    )
                 target_qubit = target_qubits[0]
                 # create the quic gate string
-                quic_gate_string = "C" * len(control_qubits) + quic_gate[target_qubit]
+                quic_gate_string = (
+                    "C" * len(control_qubits) + quic_gate[target_qubit]
+                )
                 # get the qiskit gate
-                qiskit_gate = QuiCGate.from_quic_name(quic_gate_string).get_qiskit_instruction()
+                qiskit_gate = QuiCGate.from_quic_name(
+                    quic_gate_string
+                ).get_qiskit_instruction()
                 # add the gate to the circuit
                 circuit.append(
                     qiskit_gate,
-                    [qr[index] for index in control_qubits] + [qr[target_qubit]]
+                    (
+                        [qr[index] for index in control_qubits] +
+                        [qr[target_qubit]]
+                    )
                 )
             else:
                 # we have no control qubits
@@ -274,12 +284,14 @@ class QuiCBackend(Backend):
                 target_qubits = [
                     index
                     for index, qubit in enumerate(quic_gate)
-                    #if qubit != 'I'
+                    # if qubit != 'I'
                 ]
                 # append the gates to the circuit
                 for target_qubit in target_qubits:
                     # get the qiskit gate
-                    qiskit_gate = QuiCGate.from_quic_name(quic_gate[target_qubit]).get_qiskit_instruction()
+                    qiskit_gate = QuiCGate.from_quic_name(
+                        quic_gate[target_qubit]
+                    ).get_qiskit_instruction()
                     if qiskit_gate.name == "measure":
                         circuit.append(
                             qiskit_gate,
@@ -296,7 +308,6 @@ class QuiCBackend(Backend):
         if add_measurements:
             circuit.measure(qr, cr)
         return circuit
-
 
     def run_quic_script(
         self,
@@ -318,4 +329,3 @@ class QuiCBackend(Backend):
         )
         kwargs.pop('add_measurements', None)
         return self.run(qc, **kwargs)
-        

@@ -1,6 +1,6 @@
 import qiskit_pqcee_provider as qpp
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
-from qiskit import Aer
+from qiskit_aer import AerProvider
 
 # Create a Quantum Register with 2 qubits.
 qr = QuantumRegister(2, 'q')
@@ -40,12 +40,13 @@ circuit.measure(qr, cr)
 print(circuit.draw())
 
 # initi the qpp provider
-a = qpp.PqceeProvider()
+# a = qpp.PqceeProvider()
+a = qpp.LocalPqceeProvider()
 # get the backend
 backend = a.get_backend('pqcee_simulator')
 
 # run on the simulator
-simulator = Aer.get_backend('aer_simulator')
+simulator = AerProvider().get_backend('aer_simulator')
 result = simulator.run(circuit).result()
 print(result.get_counts())
 
