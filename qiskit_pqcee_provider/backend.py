@@ -23,7 +23,7 @@ import web3
 import pathlib
 from solcx import compile_source
 
-from .job import BlockcahinJob
+from .job import BlockChainJob
 
 logger = logging.getLogger(__name__)
 
@@ -337,7 +337,7 @@ class BlockchainBackend(Backend):
             random_seed=self.state_seed.randint(low=0, high=65535)
         )
         job_handle = self.web3_contract
-        return BlockcahinJob(self, job_handle, job_json, circuits)
+        return BlockChainJob(self, job_handle, job_json, circuits)
 
     def get_transpiled_circuit(
             self,

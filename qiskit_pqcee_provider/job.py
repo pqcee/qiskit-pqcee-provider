@@ -10,7 +10,7 @@ import numpy as np
 import threading
 
 
-class BlockcahinJob(Job):
+class BlockChainJob(Job):
     r"""
     A job that runs on the blockchain.
     """

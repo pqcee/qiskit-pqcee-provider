@@ -2,7 +2,7 @@ from .provider import BlockchainProvider
 from .provider import LocalPqceeProvider
 from .provider import PqceeProvider
 from .backend import BlockchainBackend
-from .job import BlockcahinJob
+from .job import BlockChainJob
 
 __author__ = "pQCee Product Team"
 __copyright__ = "Copyright 2023, Singapore Blockchain Innovation Programme"
@@ -15,7 +15,7 @@ __status__ = "Production"
 __all__ = [
     "BlockchainProvider",
     "BlockchainBackend",
-    "BlockcahinJob",
+    "BlockChainJob",
     "LocalPqceeProvider",
     "PqceeProvider"
 ]
