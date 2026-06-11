@@ -166,3 +166,6 @@ cython_debug/
 
 # generated files for documentation by autoapi
 /docs/source/autoapi
+
+# npm modules
+**/node_modules
